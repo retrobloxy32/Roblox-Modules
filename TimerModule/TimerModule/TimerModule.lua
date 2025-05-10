@@ -41,19 +41,23 @@ function Meta:BindToTimerUpdate(callback: (Time: number?) -> ())
 	return Connection
 end
 
+function Meta:YieldUntilTimerEnds()
+	EndEvents[self.Name].Event:Wait()
+end
+
 function Meta:Start()
 	if Timers[self.Name] then return warn("timer already running") end
-	Timer[self.Name].Running = true
+	TimerStatus[self.Name].Running = true
 
 	Timers[self.Name] = coroutine.create(function()
 		for i = self.StartTime, 0, -1 do
-			if not Timer[self.Name].Running then break end
+			if not TimerStatus[self.Name].Running then break end
 
-			while Timer[self.Name].Paused and Timer[self.Name].Running do
+			while TimerStatus[self.Name].Paused and TimerStatus[self.Name].Running do
 				task.wait()
 			end
 
-			if not Timer[self.Name].Running then break end
+			if not TimerStatus[self.Name].Running then break end
 
 			self.Time = i
 			UpdateEvents[self.Name]:Fire(i)
@@ -68,25 +72,25 @@ end
 
 function Meta:Pause()
 	if not Timers[self.Name] then return warn("no timer running") end
-	if Timer[self.Name].Paused then return warn("already paused") end
+	if TimerStatus[self.Name].Paused then return warn("already paused") end
 
-	Timer[self.Name].Paused = true
+	TimerStatus[self.Name].Paused = true
 end
 
 function Meta:Resume()
 	if not Timers[self.Name] then return warn("no timer running") end
-	if not Timer[self.Name].Paused then return warn("not paused") end
+	if not TimerStatus[self.Name].Paused then return warn("not paused") end
 
-	Timer[self.Name].Paused = false
+	TimerStatus[self.Name].Paused = false
 end
 
 
 function Meta:IsTicking()
-	return (Timer[self.Name].Running and not Timer[self.Name].Paused)
+	return (TimerStatus[self.Name].Running and not TimerStatus[self.Name].Paused)
 end
 
 function Meta:IsPaused()
-	return Timer[self.Name].Paused
+	return TimerStatus[self.Name].Paused
 end
 
 function Meta:GetCurrentTime()
@@ -95,10 +99,9 @@ end
 
 function Meta:Stop()
 	if not Timers[self.Name] then return warn(`no timer for "{self.Name}"`) end
-
 	print(`Stopping "{self.Name}"`)
 
-	Timer[self.Name].Running = false
+	TimerStatus[self.Name].Running = false
 	EndEvents[self.Name]:Fire()
 
 	Timers[self.Name] = nil
