@@ -35,17 +35,32 @@ Timer.Ended:Connect(function()
 	print("Timer ended!")
 end)
 
--- You can also get the timer's time with Timer.Time
---print("The timer is at", Timer.Time)
+--You can also get the timer's time with Timer.Time
+print("The timer is at", Timer.Time)
 
 -- or Timer:GetCurrentTime()
---print("The timer is at", Timer:GetCurrentTime())
+print("The timer is at", Timer:GetCurrentTime())
+
+--// !! IMPORTANT: ALL VARIABLES OF TIMER ARE READ-ONLY !! \\
+--// !! IMPORTANT: ALL VARIABLES OF TIMER ARE READ-ONLY !! \\
+--// !! IMPORTANT: ALL VARIABLES OF TIMER ARE READ-ONLY !! \\
 
 Timer:Pause() -- You can Pause the Timer
 print(Timer:IsPaused()) -- And know if it's paused!
 
 Timer:Resume() -- You can also Resume the Timer
 print(Timer:IsTicking()) -- And also know if it's ticking (running)!
+
+-- You can add/remove time from the timer
+Timer:AddTime(3) -- Adding 3 seconds
+print(Timer:GetCurrentTime()) -- will be atleast 3
+
+Timer:AddTime(-3) -- Removing 3 seconds
+print(Timer:GetCurrentTime()) -- will be the time it was before
+
+-- You can also change the timer's speed
+Timer:SetSpeed(2) -- Will be twice as fast
+Timer:SetSpeed(1) -- Sets back to default speed
 
 -- There are 2 ways to yield the script until the timer ends
 Timer.Ended:Wait() -- Just wait until the Ended event fires
