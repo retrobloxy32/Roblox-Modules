@@ -133,6 +133,24 @@ function Meta:GetCurrentTime()
 	return self.Time
 end
 
+function Meta:Convert(Format: "Minutes" | "Seconds" | "MinutesAndSeconds"): (number)
+	local CurrentTime = self:GetCurrentTime() :: number
+	local Minutes = math.floor(CurrentTime / 60)
+	local Seconds = CurrentTime % 60
+	
+	if Format == "Minutes" then
+		return Minutes
+	elseif Format == "Seconds" then
+		return Seconds
+	else
+		return Minutes, Seconds
+	end
+end
+
+function Meta:Unconvert(Minutes: number, Seconds: number)
+	return Minutes * 60 + Seconds
+end
+
 function Meta:Stop()
 	if not Timers[self.Name] then return warn(`no timer for "{self.Name}"`) end
 	print(`Stopping "{self.Name}"`)

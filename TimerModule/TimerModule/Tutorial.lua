@@ -66,6 +66,17 @@ Timer:SetSpeed(1) -- Sets back to default speed
 Timer.Ended:Wait() -- Just wait until the Ended event fires
 Timer:YieldUntilTimerEnds() -- It does it...
 
+-- Wanna make a digital clock? You can get a minutes format and seconds format!
+local Minutes = Timer:Convert("Minutes")
+local Seconds = Timer:Convert("Seconds")
+
+--[[
+	THIS IS ALSO POSSIBLE:
+	local Minutes, Seconds = Timer:Convert("MinutesAndSeconds")
+]]
+
+print(`Time: {Minutes}:{Seconds}`)
+
 -- If you don't want your timer to continue anymore, you can Stop it!
 Timer:Stop() -- This will fire the Ended event tho!
 
